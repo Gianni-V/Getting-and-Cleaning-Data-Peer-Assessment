@@ -1,8 +1,10 @@
-#   Loading dplyr package
+#   /!\ Important: It is presumed that the working directory is already pointing at "UCI HAR Dataset" /!\
+#   /!\ root folder and that the original files and folders locations and names were not altered.     /!\
+
+#   Loads the dplyr package
 library("dplyr")
 
 #   Small utility function to load the test or training data set. 
-#   !!! Important: It is supposed that the working directory is already pointing at "UCI HAR Dataset" folder. !!!
 #       xPath: relative file path to the features data set
 #       yPath: relative file path to the activities data set
 #       sPath: relative file path to the subject list data set
@@ -46,9 +48,9 @@ testFrame <- loadDataSet("test/X_test.txt", "test/y_test.txt", "test/subject_tes
 
 mainDataSet <- bind_rows(testFrame, trainFrame) %>%     #   Assignment #1: merges the two data sets
     select(subject, matches("_mean_|_mean$|_standard_deviation_|_standard_deviation$"), activity) %>%   #   Assignment #2: selects only mean and standard deviation columns from feature measurements.
-    mutate(activity = factor(activity, labels=activityLbl$V2))      #   Assignment #3: Replaces numerical activity codes by readable labels.
+    mutate(activity = factor(activity, labels=activityLbl$V2))      #   Assignment #3: replaces numerical activity codes by readable labels.
 
-#   Assignment #5: Generates an independent tidy data set with the average of each variable for each activity and each subject.
+#   Assignment #5: generates an independent tidy data set with the average of each variable for each activity and each subject.
 summarizedDataSet <- mainDataSet %>% group_by(subject, activity) %>% summarise_each(funs(mean))
 
 #   Cleans up the temporary variables.
